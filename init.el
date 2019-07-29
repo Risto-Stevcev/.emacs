@@ -24,16 +24,17 @@
 (windmove-default-keybindings)
 
 ; Move windows
-(global-set-key (kbd "C-x C-<up>") 'windmove-up)
-(global-set-key (kbd "C-x C-<down>") 'windmove-down)
-(global-set-key (kbd "C-x C-<left>") 'windmove-left)
-(global-set-key (kbd "C-x C-<right>") 'windmove-right)
+; can just use Shift+Arrow key
+;(global-set-key (kbd "C-x C-<up>") 'windmove-up)
+;(global-set-key (kbd "C-x C-<down>") 'windmove-down)
+;(global-set-key (kbd "C-x C-<left>") 'windmove-left)
+;(global-set-key (kbd "C-x C-<right>") 'windmove-right)
 
 ; Resize windows
-(global-set-key (kbd "C-M-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "C-M-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-M-<down>") 'shrink-window)
-(global-set-key (kbd "C-M-<up>") 'enlarge-window)
+(global-set-key (kbd "C-x C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "C-x C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-x C-<down>") 'shrink-window)
+(global-set-key (kbd "C-x C-<up>") 'enlarge-window)
 
 (add-to-list 'load-path "~/.emacs.d/evil")
 (require 'evil)
@@ -44,8 +45,15 @@
 ; Hide the menu bar
 (menu-bar-mode 0)
 
+; Turn off electric indent
+(electric-indent-mode -1)
+
 (flycheck-mode)
 (tabbar-mode)
+
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(show-paren-mode 1)
 
 ; Color theme
 ;(load-theme 'one-dark t)
@@ -88,6 +96,16 @@
 (setq lsp-prefer-flymake nil)
 ;; end LSP
 
+;; Paredit
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -98,7 +116,7 @@
     ("a71be4e5e9e418025daea651f8a1628953abb7af505da5e556e95061b6a6e389" default)))
  '(package-selected-packages
    (quote
-    (lsp-treemacs company-lsp lsp-java zenburn-theme one-themes tabbar yasnippet lsp-ui tuareg flycheck slime evil lsp-mode ivy))))
+    (treemacs-evil rainbow-delimiters paredit lsp-treemacs company-lsp lsp-java zenburn-theme one-themes tabbar yasnippet lsp-ui tuareg flycheck slime evil lsp-mode ivy))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
