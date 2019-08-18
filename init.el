@@ -36,6 +36,7 @@
 (global-set-key (kbd "C-x C-<down>") 'shrink-window)
 (global-set-key (kbd "C-x C-<up>") 'enlarge-window)
 
+
 (add-to-list 'load-path "~/.emacs.d/evil")
 (require 'evil)
 
@@ -56,7 +57,8 @@
 (show-paren-mode 1)
 
 ; Color theme
-;(load-theme 'one-dark t)
+;(load-theme 'one-light t)
+;(load-theme 'solarized-light t)
 (load-theme 'zenburn t)
 
 ; TODO: how to set clipboard to paste from both? this doesnt fix it:
@@ -97,14 +99,18 @@
 ;; end LSP
 
 ;; Paredit
-(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+(require 'smartparens-config)
+(add-hook 'emacs-lisp-mode-hook       #'smartparens-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-mode)
+(add-hook 'lisp-mode-hook             #'smartparens-mode)
+(add-hook 'lisp-interaction-mode-hook #'smartparens-mode)
+(add-hook 'scheme-mode-hook           #'smartparens-mode)
+(add-hook 'slime-repl-mode-hook (lambda () (smartparens-mode +1)))
+
+(global-set-key (kbd "M-<up>") 'sp-wrap-round)
+(global-set-key (kbd "M-<down>") 'sp-splice-sexp)
+(global-set-key (kbd "M-<left>") 'sp-backward-slurp-sexp)
+(global-set-key (kbd "M-<right>") 'sp-forward-slurp-sexp)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -116,7 +122,7 @@
     ("a71be4e5e9e418025daea651f8a1628953abb7af505da5e556e95061b6a6e389" default)))
  '(package-selected-packages
    (quote
-    (treemacs-evil rainbow-delimiters paredit lsp-treemacs company-lsp lsp-java zenburn-theme one-themes tabbar yasnippet lsp-ui tuareg flycheck slime evil lsp-mode ivy))))
+    (solarized-theme smartparens treemacs-evil rainbow-delimiters paredit lsp-treemacs company-lsp lsp-java zenburn-theme one-themes tabbar yasnippet lsp-ui tuareg flycheck slime evil lsp-mode ivy))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
