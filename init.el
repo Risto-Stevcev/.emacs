@@ -16,10 +16,14 @@
                          ("melpa" . "https://melpa.org/packages/")))
 
 (setq backup-directory-alist
-    `((".*" . ,(expand-file-name (concat user-emacs-directory "backups")))))
+    `(("." . ,(expand-file-name (concat user-emacs-directory "backups")))))
+
+;(setq backup-by-copying t)
 
 (setq auto-save-file-name-transforms
     `((".*" ,(expand-file-name (concat user-emacs-directory "autosaves")) t)))
+
+(setq create-lockfiles nil)
 
 (windmove-default-keybindings)
 
@@ -39,6 +43,8 @@
 
 (add-to-list 'load-path "~/.emacs.d/evil")
 (require 'evil)
+
+(setq-default evil-shift-width 2)
 
 ;; Minor modes
 (evil-mode 1)
@@ -62,8 +68,11 @@
 (load-theme 'zenburn t)
 
 ; TODO: how to set clipboard to paste from both? this doesnt fix it:
-;(setq x-select-enable-primary t)
+;(setq x-select-enable-primary nil)
 ;(setq x-select-enable-clipboard t)
+
+(require 'xclip)
+(xclip-mode 1)
 
 (defconst inferior-lisp-program "/usr/bin/sbcl")
 (setq slime-contribs '(slime-fancy))
@@ -81,6 +90,10 @@
 (add-hook 'tuareg-mode-hook 'flycheck-mode)
 (add-hook 'js-mode-hook 'flycheck-mode)
 (add-hook 'java-mode-hook 'flycheck-mode)
+
+; Indent ocaml code properly
+(add-hook 'tuareg-mode-hook
+          (lambda () (setq indent-line-function #'indent-relative-first-indent-point)))
 
 ; TODO: not working
 ;(setq lsp-java-server-install-dir "/home/risto/eclipse.jdt.ls/server/")
@@ -107,10 +120,35 @@
 (add-hook 'scheme-mode-hook           #'smartparens-mode)
 (add-hook 'slime-repl-mode-hook (lambda () (smartparens-mode +1)))
 
+;; Erlang
+(add-hook 'erlang-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-M-q") 'erlang-indent-region)))
+
 (global-set-key (kbd "M-<up>") 'sp-wrap-round)
 (global-set-key (kbd "M-<down>") 'sp-splice-sexp)
 (global-set-key (kbd "M-<left>") 'sp-backward-slurp-sexp)
 (global-set-key (kbd "M-<right>") 'sp-forward-slurp-sexp)
+
+(global-set-key (kbd "C-c C-<left>") 'tabbar-backward-tab)
+(global-set-key (kbd "C-c C-<right>") 'tabbar-forward-tab)
+
+(defconst max-column 100)
+(require 'whitespace)
+(setq whitespace-style '(face empty tabs lines-tail trailing))
+(setq whitespace-line-column max-column)
+(global-whitespace-mode t)
+
+;; Allows to reformat longs that are too long with M-q
+(setq-default fill-column max-column)
+(refill-mode)
+
+(setq-default indent-tabs-mode nil)
+
+;; Use SSL for rcirc
+(setq-default rcirc-server-alist
+      '(("irc.freenode.net" :port 6697 :encryption tls
+	 :channels ("#rcirc" "#lisp"))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -120,9 +158,10 @@
  '(custom-safe-themes
    (quote
     ("a71be4e5e9e418025daea651f8a1628953abb7af505da5e556e95061b6a6e389" default)))
+ '(lsp-ui-sideline-enable nil)
  '(package-selected-packages
    (quote
-    (solarized-theme smartparens treemacs-evil rainbow-delimiters paredit lsp-treemacs company-lsp lsp-java zenburn-theme one-themes tabbar yasnippet lsp-ui tuareg flycheck slime evil lsp-mode ivy))))
+    (erlang yaml-mode xclip magit solarized-theme smartparens treemacs-evil rainbow-delimiters paredit lsp-treemacs company-lsp lsp-java zenburn-theme one-themes tabbar yasnippet lsp-ui tuareg flycheck slime evil lsp-mode ivy))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

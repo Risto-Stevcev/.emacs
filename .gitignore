@@ -5,3 +5,5 @@ elpa/
 eclipse.jdt.ls/
 \#*
 .lsp-session*
+.cache/
+transient/
